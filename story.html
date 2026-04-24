@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="font-[Poppins] bg-gradient-to-t from-[#dd7002] to-[#ff6f91] min-h-screen">
+
+    <!-- HEADER -->
+    <header class="bg-[#dd7002] p-4">
+        <div class="flex justify-between items-center">
+            <h1 class="text-[#5c4033] font-bold text-3xl" style="font-family: 'Playfair Display', serif;">
+                Data Storytelling
+            </h1>
+
+            <a href="index.html" class="text-white hover:text-gray-200">
+                ← back home
+            </a>
+        </div>
+    </header>
+
+    <!-- INTRO -->
+    <div class="max-w-5xl mx-auto p-6">
+        <h2 class="text-white text-2xl font-semibold mb-4">
+            Interactive Data Visualizations
+        </h2>
+
+        <p class="text-white opacity-90 mb-8">
+            A collection of Tableau dashboards exploring HBCU representation, digital equity, and data-driven social insights.
+        </p>
+
+        <!-- GRID -->
+        <div class="space-y-10">
+
+            <!-- ===================== PROJECT 1 ===================== -->
+            <div class="bg-white rounded-lg shadow-lg p-5">
+                <h3 class="text-[#ff6f91] font-bold text-lg mb-3">
+                    HBCU Representation Dashboard
+                </h3>
+
+                <p class="text-gray-600 text-sm mb-4">
+                    Visualization exploring institutional representation patterns across HBCUs and related datasets.
+                </p>
+
+                <!-- TABLEAU EMBED -->
+                <div class="w-full overflow-x-auto">
+                    <div class='tableauPlaceholder' id='viz1777024289392' style='position: relative'>
+                        <noscript>
+                            <a href='#'>
+                                <img alt=' ' src='https://public.tableau.com/static/images/U2/U2_HBCUe_Viz/Dashboard12/1_rss.png' style='border: none' />
+                            </a>
+                        </noscript>
+
+                        <object class='tableauViz' style='display:none;'>
+                            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                            <param name='embed_code_version' value='3' />
+                            <param name='site_root' value='' />
+                            <param name='name' value='U2_HBCUe_Viz/Dashboard12' />
+                            <param name='tabs' value='yes' />
+                            <param name='toolbar' value='yes' />
+                            <param name='static_image' value='https://public.tableau.com/static/images/U2/U2_HBCUe_Viz/Dashboard12/1.png' />
+                            <param name='animate_transition' value='yes' />
+                            <param name='display_static_image' value='yes' />
+                            <param name='display_spinner' value='yes' />
+                            <param name='display_overlay' value='yes' />
+                            <param name='display_count' value='yes' />
+                            <param name='language' value='en-US' />
+                        </object>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== PROJECT 2 ===================== -->
+            <div class="bg-white rounded-lg shadow-lg p-5">
+                <h3 class="text-[#ff6f91] font-bold text-lg mb-3">
+                    Digital Equity Analysis Dashboard
+                </h3>
+
+                <p class="text-gray-600 text-sm mb-4">
+                    Analysis of access gaps, infrastructure disparities, and digital inclusion metrics.
+                </p>
+
+                <!-- TABLEAU EMBED -->
+                <div class="w-full overflow-x-auto">
+                    <div class='tableauPlaceholder' id='viz1777024348474' style='position: relative'>
+                        <noscript>
+                            <a href='#'>
+                                <img alt=' ' src='https://public.tableau.com/static/images/RW/RW_U3/Dashboard1/1_rss.png' style='border: none' />
+                            </a>
+                        </noscript>
+
+                        <object class='tableauViz' style='display:none;'>
+                            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                            <param name='embed_code_version' value='3' />
+                            <param name='site_root' value='' />
+                            <param name='name' value='RW_U3/Dashboard1' />
+                            <param name='tabs' value='yes' />
+                            <param name='toolbar' value='yes' />
+                            <param name='static_image' value='https://public.tableau.com/static/images/RW/RW_U3/Dashboard1/1.png' />
+                            <param name='animate_transition' value='yes' />
+                            <param name='display_static_image' value='yes' />
+                            <param name='display_spinner' value='yes' />
+                            <param name='display_overlay' value='yes' />
+                            <param name='display_count' value='yes' />
+                            <param name='language' value='en-US' />
+                        </object>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TABLEAU SCRIPT (required once per page) -->
+    <script type='text/javascript'>
+        var divElement1 = document.getElementById('viz1777024289392');
+        var vizElement1 = divElement1.getElementsByTagName('object')[0];
+        vizElement1.style.minWidth = '2357px';
+        vizElement1.style.maxWidth = '100%';
+        vizElement1.style.minHeight = '1350px';
+
+        var divElement2 = document.getElementById('viz1777024348474');
+        var vizElement2 = divElement2.getElementsByTagName('object')[0];
+        vizElement2.style.minWidth = '1016px';
+        vizElement2.style.maxWidth = '100%';
+        vizElement2.style.minHeight = '1450px';
+
+        var scriptElement = document.createElement('script');
+        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        vizElement1.parentNode.insertBefore(scriptElement, vizElement1);
+    </script>
+
+</body>
+</html>
