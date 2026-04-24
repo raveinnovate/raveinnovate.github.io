@@ -1,0 +1,395 @@
+---
+title: "Lab 1 - Bivariate Analysis"
+author: "Raven W."
+output:
+  html_document:
+    theme: flatly
+  editor_options:
+    markdown:
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,  # Suppress messages
+                      warning = FALSE)
+```
+
+### Installation and Setup
+```{r}
+# Install Packages
+# install.packages("package") - syntax to install packages in R
+# install.packages("tidyverse")
+# install.packages("devtools")
+# install.packages("remotes")
+# install.packages("tigris")
+#install.packages("descr")
+ 
+# Load the necessary libraries needed for today's analyses
+library(tidyverse) #collection of R packages designed for data science
+library(dplyr)
+library(remotes)
+library(critstats)
+library(glue)
+library(ggplot2)
+library(tigris)
+library(descr)
+
+
+## Update packages if needed; remove # to run code
+# update.packages("critstats") # - syntax to update packages in R
+```
+
+## Part 1 - Extract Dataset from critstats
+``` {r}
+data(package="critstats") # shows list of datasets in critstats package
+??critstats::blackmedianincome
+```
+
+### Initial Dataset Exploration
+``` {r, prework}
+bmi <- critstats::blackmedianincome # assign dataset to main dataframe
+# View(bmi)
+```
+
+
+## Part 2 - Dataset Cleaning/Modification and Analyis
+``` {r}
+bmiC = critstats::blackmedianincome %>%
+  na.omit() %>%
+  select(NAME, estimate , moe, GEOID) %>%
+  rename(income = estimate)%>%
+  rename(state = NAME) %>%
+  rename(geoid = GEOID)
+
+bmiC # removed variable column, NA values, and rename 3 columns (estimate, NAME, and GEOID)
+
+```
+
+### Add Region Column to Dataset
+- Added region column to help with capturing "state" like break/sentiments, for plotting sake. When plotting states (categorical) values against the black median income (numerical) values, the amount of states (52), it not as practical for every graph in this setting/environment. Further analysis, can be carried out at a bigger scale for some plots. By putting the states into regions made up of states, I was able to view states vs. income in a different way. I recognize that a deeper dive, could further enhance this analysis.
+```{r}
+# Add region column
+# Define regions (consisting of states)
+northeast <- c("Maine","New Hampshire","Vermont","Massachusetts","Rhode Island","Connecticut","New York","New Jersey","Pennsylvania")
+midwest <- c("Ohio","Indiana","Illinois","Michigan","Wisconsin","Minnesota","Iowa","Missouri","North Dakota","South Dakota","Nebraska","Kansas")
+south <- c("Delaware","Maryland","District of Columbia","Virginia","West Virginia","North Carolina","South Carolina","Georgia","Florida",
+           "Kentucky","Tennessee","Mississippi","Alabama","Oklahoma","Texas","Arkansas","Louisiana")
+west <- c("Montana","Idaho","Wyoming","Colorado","New Mexico","Arizona","Utah","Nevada","Washington","Oregon","California","Alaska","Hawaii")
+
+# Add region column
+bmiC<- bmiC %>%
+  mutate(region = case_when(
+    state %in% northeast ~ "Northeast",
+    state %in% midwest ~ "Midwest",
+    state %in% south ~ "South",
+    state %in% west ~ "West",
+    TRUE ~ "Other"
+  ))
+```
+
+
+### Total States Unique Count
+- <strong>Assumption:</strong> "States" refer to the 50 CONUS (Continental U.S.) states, Washington, D.C., and Puerto Rico.
+- Counts the unique states in the states column
+- Lists all the states. 
+```{r}
+# Count unique states 
+# Assumptions - "states" refers to the 50 CONUS states, Washington, D.C., and Puerto Rico
+total_states_count = length(unique(bmiC$state)) # counts unique states in states column
+total_states_lst = (bmiC$state)
+
+# Print all states (includes 50 states, PR, and D.C.)
+print(total_states_lst)
+
+
+# Print column names
+glue("Column Names: {colnames(bmiC)}")
+```
+### Black Median Income By State vs. U.S. National Median Income 
+<p>The median U.S. income in 2020, according to U.S. Census Bureau’s Income and Poverty in the United States: 2020, is $67,251.</p>
+<p>For the sake of this analysis, we will not include P.R. in the following chart due to lack of data/reputable sources for the median income in 2020.</p>
+
+```{r, fig.height=20, fig.width=10}
+med_USincome_2020 = 67521 # excludes PR, gathered from 
+
+library(ggplot2)
+
+ggplot(head(bmi, n=51), aes(x = reorder(NAME, estimate), y = estimate)) +
+  geom_col(fill = "steelblue") +
+  geom_hline(yintercept = med_USincome_2020, color = "red", linetype = "dashed", size = 1) +
+  coord_flip() +
+  labs(
+    x = "State",
+    y = "Black Median Income",
+    title = "Black Median Income by State (Compared to National Median) in 2020"
+  ) +
+  annotate(
+    "text",
+    x=30,
+    y= med_USincome_2020 - 5000,
+    label = paste("National Median"),
+    color = "red", size = 4, hjust = 0
+  ) +
+  theme_minimal(base_size = 14) +  # bigger text
+  theme(
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.major.y = element_blank()  # removes distracting horizontal grid lines
+  )
+```
+<p> As can be seen above, the average Black median income in most states is well below the 2020 U.S. median income. To note, the median value shows the middle value in a dataset, meaning 50% of the data points are above it and 50% are below it, the median provides a measure of central tendency that is useful because it is not skewed by extremely high or low values, also known as outliers. It prompts a consideration, of the other demographic median incomes in comparison, and the effect of state citizenship, cost of living per state, and how that might impact the black median income. Therefore, to see that the Black median income in most states are well below the median income for the entire U.S., means that half of the Black population across the states may be making lower than the median values listed here, raising concern on Black well-being and livelihood, consider the varying deficits across all states.</p>
+
+
+### State with Highest Black Median Income
+- Displays the state with the highest Black median income in 2020
+``` {r}
+# Calculate highest black median income, denote the associated state
+max_bmi_by_state = bmiC[bmiC$income == max(bmiC$income), c("state", "income")]
+# print(max_bmi_by_state) # print subset df
+max_state = toString(max_bmi_by_state[1])
+max_state_income = as.integer(max_bmi_by_state[2])
+glue("Emphasis: {max_state} has the highest black median income, ${max_state_income}")
+
+```
+
+### Top 10 States with Highest Black Median Income
+- Displays the top 10 states with the highest Black median income in 2020
+``` {r}
+# Show the top 10 states with the highest Black median income income
+bmiC[head(order(-bmiC$income), n=10), c("state", "income", "region")]
+
+```
+
+
+### State with Lowest Black Median Income
+- Displays the state with the lowest Black median income in 2020
+``` {r}
+# Calculate lowest black median income, denote the associated state
+min_bmi_by_state = bmiC[bmiC$income == min(bmiC$income), c("state", "income")]
+# print(min_bmi_by_state) # print subset df
+min_state = toString(min_bmi_by_state[1])
+min_state_income = as.integer(min_bmi_by_state[2])
+
+glue("Emphasis: {min_state} has the lowest black median income, ${min_state_income}.")
+```
+- For additional context, the size of Puerto Rico, is very small. It can be compared to Connecticut in size, and is just slightly smaller than the state. Connecticut is the third smallest state in the CONUS. 
+- Furthermore, the demographic makeup of Puerto Rico varies. While Black median income is deemed to be the lowest out of all 52 states, in 2020, 49.8% of people in PR are two or more races, while 7% listed they were Black or African-American alone. Keying into the history of Puerto Rico, it requires a deeper look into what is considered the "Black" community behind the critstats dataset value for PR Black Median Income. A combined look at Black alone, and Black+ populations, may present for a different median income value.
+<a href="https://centropr.hunter.cuny.edu/app/uploads/2023/02/022223-Puerto-Ricos-2020-Race_Ethnicity-Decennial-Analysis.pdf">Link to Source</a>
+
+### Top 10 states with Lowest Black Median Income
+- Displays the top 10 states with the lowest Black median income in 2020
+``` {r}
+# Show 10 states with the lowest Black median income income
+# Show the top 10 states with the highest Black median income income
+bmiC[head(order(bmiC$income), n=10), c("state", "income", "region")]
+```
+
+### Boxplot of Black Median Income (2020) by Region
+- Boxplot of Black median income across regions (made up of states) shows the typical values, the spread, and any states with unusually high or low median income.
+```{r}
+boxplot(bmiC$income ~ bmiC$region, 
+        main="Boxplot of Black Median Income (2020) by Region",  
+        ylab="Income", xlab="Region", 
+        col = c("green", "blue", "orange", "pink", "lightblue"), outline=TRUE, outcol="orange", boxwex=0.9)
+
+
+# A boxplot shows how a numeric variable is spread out:
+# - The middle line in the box is the median (middle value).
+# - The box represents the middle 50% of the data (from the 25th to the 75th percentile).
+# - The whiskers show the range of most of the data.
+# - Any dots outside the whiskers are outliers (unusually high or low values).
+
+```
+
+
+### Analysis of Variance (ANOVA) Testing
+- Furthering my bivariate analysis (categorical, numerical), I leveraged the ANOVA test for Black median income. The ANOVA test checks if the income differences seen from one state to the next are due to the states belonging to a specific region (like the South or the Northeast), or if those differences are just random and aren't related to the region at all. After running the test on , I got a p-value of (0.000114). Sine this number is less than 0.05, the result is considered statistically significant (or reliable). Therefore, the region a state is in is a major, statistically confirmed factor that likely determines Black median income.The decision was made to select regions because there is likely too much variance between each individual state.
+
+```{r}
+print("Anova Result of Black Median Income, Region")
+anova_result <- aov(income ~ region, data = bmiC)
+print(anova_result)
+
+print("Summary: Anova Result")
+print(summary(anova_result))
+```
+
+### States by Region
+```{r}
+# Southern States w/income df
+south_bmi = bmiC[bmiC$region == "South", c("state", "income", "moe")]
+print(south_bmi)
+
+# Western States w/income df
+west_bmi = bmiC[bmiC$region == "West", c("state", "income", "moe")]
+print(west_bmi)
+
+
+# Midwestern States w/income df
+mw_bmi = bmiC[bmiC$region == "Midwest", c("state", "income", "moe")]
+print(mw_bmi)
+
+# Northern States w/income df
+north_bmi = bmiC[bmiC$region == "Northeast", c("state", "income", "moe")]
+print(north_bmi)
+
+# Other States w/income df
+other_bmi = bmiC[bmiC$region == "Other", c("state", "income", "moe")]
+print(other_bmi)
+```
+
+### Black Median Income (2020) by 50 States
+- The visual mapping shows the Black median income across the 50 states. The darker the concentration, the higher the median income level in the state.
+```{r}
+library(maps)
+library(dplyr)
+
+us_states <- map_data("state")
+bmiC <- bmiC %>% mutate(state = tolower(state))
+
+plot_data <- us_states %>%
+  left_join(bmiC, by = c("region" = "state"))
+
+ggplot(plot_data, aes(long, lat, group = group, fill = income)) +
+  geom_polygon(color = "white") +
+  scale_fill_gradient(low = "lightblue", high = "black") +
+  labs(fill = "Black Median Income ($)", title = "Black Median Income (2020) by 50 States") +
+  theme_void()
+
+
+```
+
+
+### Income Margin of Error (2020) by 50 States
+- The visual mapping shows the Black median income margin of error across the 50 states. The darker the concentration, the higher the margin of error in the state.
+```{r}
+library(maps)
+library(dplyr)
+
+us_states <- map_data("state")
+bmiC <- bmiC %>% mutate(state = tolower(state))
+
+plot_data <- us_states %>%
+  left_join(bmiC, by = c("region" = "state"))
+
+ggplot(plot_data, aes(long, lat, group = group, fill = moe)) +
+  geom_polygon(color = "white") +
+  scale_fill_gradient(low = "pink", high = "red") +
+  labs(fill = "Income Margin of Error by 50 States ($)", title = "Income Margin of Error (2020) by 50 States") +
+  theme_void()
+
+
+```
+
+
+### Barplot of Median Income by Region (2020)
+```{r}
+
+library(ggplot2)
+
+ggplot(bmiC, aes(x = reorder(region, income), y = income)) +
+  geom_col(fill = "orange") +
+  coord_flip() +
+  labs(x = "State", y = "Median Income", title = "Median Income by Region") +
+  theme_minimal()
+
+```
+
+
+```{r}
+multi_model <- lm(income ~ region, data = bmiC)
+summary(multi_model)
+
+
+
+```
+
+
+## Reports (Parts 1-2)
+### Report 1.1 - What dataset have you decided to use?
+- I am using the blackmedianincome - Sample Census data B19013B_001 black median income 2020 dataset from the recommended critstats package.
+
+### Report 1.2 - Which two variables from your dataset will be analyzed?
+- I will be analyzing two variables, a **categorical variable**, and a **numerical variable**. 
+- Categorical: NAME (The U.S. 50 states, D.C., and Puerto Rico); The cleaned dataset updated column name is *states.*
+- Numerical: estimate (2020 Black Median Income); The cleaned dataset updated column name is *income.*
+
+### Report 1.3 - What is your research question?
+- "Which states have the highest and lowest Black median income, and what does this suggest about economic inequities across the U.S.?"
+
+### Report 1.4 - What is your data analysis plan? Please be descriptive.
+- For my bivariate data analysis plan, I plan to utilize the critstats::blackmedianincome dataset to do the following, in support of further exploring my research question:
+	- Determine the state with the highest Black median income
+	- List the top 10 states with the highest Black median income
+	- List the top 10 states with the lowest Black median income
+	- Augment the dataset by adding a regions column, dividing the U.S. into smaller geographical groups made up on the states from the dataset
+	- Create various plots to visualize the dataset including:
+		○ A plot that shows the black median income by state in comparison to the 2020 national median income
+		○ A boxplot of Black median income across the regions (consisting of states) that show the typical values, spread, and any states with unusually high or low median income.
+		○ A U.S. map (not including P.R.) showing the Black median income
+			§ Darker concentration represents a higher Black median income in a specific state
+		○ A U.S. map (not including P.R.) showing the Black median income margin of error 
+			§ Darker concentration represents a higher Black median income margin of error in a specific state.
+		○ A plot of 2020 Black median income by region (Northeast, Midwest, South, West, Other)
+	- Following the exploration of the blackmedianincome dataset, I plan to annotate the markdown file with relevant commentary, assumptions made, and supplementary info as desired. Working to understand the output of each portion of code, plot, or result, I will work through the reporting section of the assignment, to answer the designated questions based on the analysis I conducted.
+
+
+**Descriptive Statistics**
+- Determine the state with the highest Black median income. List the top 10 highest and lowest Black median incomes.
+- Univariate/Descriptive
+<br>
+**Data Augmentation**
+- Add a regions column to divide the states into geographical groups (Northeast, Midwest, South, West, Other).	
+- Data Wrangling/Feature Engineering
+<br>
+**Visualization & Comparison**
+- Compare state-level Black median income to the national median income.	
+- Bivariate
+<br>
+**Regional Analysis**	
+- Create a boxplot and a plot of Black median income by region.	
+- Bivariate
+<br>
+**Geospatial Visualization**
+- Create U.S. maps for Black median income and its margin of error.	
+- Geospatial/Bivariate
+<br>
+**Reporting**
+- Annotate the file with commentary, assumptions, and use the results to answer designated questions.
+- Interpretation & Documentation
+
+
+
+### Report 1.5 - What are some potential limitations for your analysis?"
+- I have a fairly limited dataset, alongside context behind dataset. I listed particular assumptions made, and opportunities for refined data analysis across the entirety of my lab 1 project, where understood. To increase the robustness of my dataset, I included an additional column for **region** that group the states in to geographic regions. A question I have consider, what is "Black" in terms of the peoples and communities that are being represeted by this median income value. In the U.S., alone, we include a culturally diverse makeup of peoples and communities. During this time, we also were faced with an unprecedented worldwide pandemic, and a siginficant amount of people died in the year of 2020. I would like to know more information about how this particular dataset might have been influenced by world events, and how the income values, might not be representative of a sense of "normalcy" due to uncommon factors.
+
+### Report 1.6 - Does your data contain missing values? If so, how have you dealt with these values?
+- No, my dataset did not contain any missing values.
+
+### Report 1.7 - Please include all code used to clean and manipulate the two variables?
+- All code used to clean and manipulate is shown and annotated for clarity, above the reports section. 
+
+
+### Report 1.8 - What relationship, if any, exists between the two variables?
+- Based on the columns from the initial blackmedianincome dataset, the initial analysis focused on the bivariate relationship between Black Median Income (Numeric) and the individual State (Categorical). After analyzing the data, there does appear to be a relationship between the two variables, specifically that depending on the state and the variability of the state, there will be a connection to variability in median income. By leaning into the augmented dataset to further categorize the states by geographic region, I was able to determine, via the ANOVA test that there is likely that the geographical region a state is in is a major, statistically confirmed factor that likely determines Black median income. What can be seen is that, mostly western and northern regions have higher Black median incomes compared to the midwestern and southern regions, that feature the states with the lowest Black median incomes. The reduction of the categorical variable from 51 states down to four regions was essential for generating a more reliable conclusion.
+
+### Report 1.9 - How do these findings relate to your research question and theory?
+- My research question is: "Which states have the highest and lowest Black median income, and what does this suggest about economic inequities across the U.S.?" My findings align closely with this question and the broader theory of economic inequity. Experiencing life in both high- and low-income states has given me personal insight into the disparities the data reflects.
+
+- Maryland, for example, had the second-highest Black median income at $69,964. I moved to Maryland in 2020 from Alabama, which ranked as the 8th lowest state for Black median income at $35,239. The contrast was immediately apparent not only in cost of living, but also in community, infrastructure, and access to opportunities. Living 20 minutes from Baltimore and 50 minutes from Washington, D.C., provided access to robust city resources, metro systems, and a wide range of services that were simply not available in Alabama, even in its largest cities where I lived and went to school.
+
+- This personal experience mirrors the patterns in the data: while poverty exists everywhere, the level of Black affluence in Maryland feels significantly higher than in Alabama. Educational opportunities reflect this disparity as well. Although I never attended school in Maryland, interactions with individuals who did show that their school systems nurtured achievement more effectively than those in Alabama, which consistently ranks near the bottom 48th to 50th among U.S. states in public school quality.
+
+- Overall, my personal experiences reinforce the data trends empahsizing that states with higher Black median incomes tend to provide greater access to resources, infrastructure, and educational support, highlighting systemic economic inequities across the country. 
+
+### Report 1.10 - What limitations exist as a result of the data analysis?
+- There is always more to the story, and I beleive a deeper look into the geographical differences, cost of living, historical living, and migration patterns to and throughout the U.S., will help further capture inequities across the U.S. in in entirety, alongside regions and states.
+
+
+<h2 style="color:red">Misc Code (Archival/Personal Reference - Not for grading)</h2>
+```{r}
+# print(head(bmiC$income, n=51))
+# kruskal.test(income ~ state, data = bmiC)
+```

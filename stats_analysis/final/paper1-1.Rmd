@@ -1,0 +1,571 @@
+---
+title: "Race, Income, and Marriage Patterns Among Young Adults in the U.S.: An Analysis of GSS Data"
+author: 
+  - "Raven Warner"
+  - "DATA 202 - Fall 2025"
+bibliography: myreferences.bib # include references file
+csl: apa.csl
+always_allow_html: true
+output:
+  word_document: 
+    reference_docx: "word-styles-reference.docx"
+    fig_caption: true
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    self_contained: true
+geometry: margin=1.0in
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE, # By default, hide code; set to TRUE to see code
+  fig.pos = 'th', # Places figures at top or here
+  out.width = '100%', dpi = 300, # Figure resolution and size
+  fig.env="figure"
+) # Latex figure environment
+
+options(knitr.table.format = "latex") # For kable tables to write LaTeX table directly
+```
+
+```{r, include=F, warning=F, messages=F}
+## set up packages and load libraries
+library(readtext)
+library(knitr)
+library(kableExtra)
+library(here)
+here::i_am("paper1.Rmd")
+```
+
+\newpage
+
+# Abstract
+
+Marriage rates in the U.S. have been declining for years, alongside a rising divorce rate, disparities are especially noticeable across racial and ethnic groups.
+These differences seem to reflect larger social and economic shifts.
+Purpose: This study uses Social Stratification Theory (economic, educational stratification) and Life Course Theory to explore whether marriage outcomes among younger adults, ages 20–35, are impacted by race and income.
+Social Stratification Theory focuses on how society is layered or structured in ways that give some groups more access to resources, opportunities, and stability than others.
+In this context, it helps explain how race and income can shape a person’s ability to form and sustain a marriage, especially when economic security plays such a big role in relationship stability.
+Additionally, Life Course Theory looks at how people’s life decisions and opportunities unfold over time, and how timing matters.
+It goes on to highlight that certain transitions do not happen in isolation, but are influenced by a person’s age, social expectations, and the circumstances they grow up in.
+For younger adults, this theory helps make sense of how financial pressures, racial disparities, and how life conditions can delay or even discourage marriage.
+This research uses a sample of categorical variables from the General Social Survey (GSS), a reliable, unbiased, and publicly accessible survey that has tracked Americans' beliefs, attitudes, and demographic traits over time.
+According to NORC, the GSS has gathered data for more than five decades, making it one of their major, long-standing projects.
+Higher income, age, and race intersect to influence marriage patterns, with younger and lower-income Black respondents less likely to be married across income levels compared to their White and higher-income peers.
+Conclusion: Although there are many reasons behind the changes in marriage rates, a core issue appears to be systemic stratification, specifically economic stratification in relation to the following.
+Financial instability,combined with historical and ongoing oppression, helps explain the large racial differences in marriage rates among young adults.
+
+**Keywords:** Black, White, Marriage Rates, Economic Inequality, Social Stratification, Racial Disparities, Life Course Theory, GSS
+
+\newpage
+
+# Introduction
+
+Marriage has been a long-time foundational institution in human society, serving as both a spiritual, social, and legal entity for family formation.
+Historically, marriage functioned as a necessary step for transitioning from childhood to adulthood.
+In earlier times, men typically assumed the role of provider and leader of the household, while women were expected to manage domestic responsibilities, care for children, and support their husbands.
+Legal and social constraints reinforced these roles: for example, in the early nineteenth century, married women in the United States were legally subordinate to their husbands, lacking the right to own property, control their own wages, or enter contracts independently.
+Over the years, women were systematically deprived of rights such as divorce, employment opportunities, and financial management, making marriage more of a social necessity than a personal choice (Reference).
+
+Over time, the legal, social, and economic functions of marriage have evolved.
+Today, marriage is no longer a requirement for survival or social status, and the age at which individuals marry has steadily increased.
+National trends show that early marriage rates are declining, and the patterns of marriage are increasingly shaped by factors such as economic stability, race, ethnicity, and age (Reference).
+Economic considerations, including personal income and financial security, have become significant determining factors for whether young adults decide to pursue marriage or not.
+
+While racial and ethnic disparities in marriage rates are particularly seen among younger adults, studies have shown that Black Americans, for example, are less likely to marry at earlier ages compared to White Americans, with socioeconomic factors often cited as key influences.
+Furthermore, “Black people delayed marriage more than White people but increased cohabitation less” (Bloome & Ang, 2020).
+@bloome2020marriage These disparities suggest that structural inequality, access to resources, and social expectations continue to play a role in marriage decisions, even in contemporary society.
+
+Despite extensive research on marriage trends, there is room to further explore understanding how race, income, and age interact to influence marriage outcomes among young adults.
+Specifically, more clarity is needed on whether racial and ethnic differences in marriage rates are primarily shaped by economic inequality or whether other social and cultural factors serve as contributing factors as well.
+Addressing these questions is key to understanding how systemic and demographic factors continue to shape family formation in the United States.
+
+This study seeks to examine the relationship between race, income, and age on marriage outcomes among young adults (ages 25–35).
+The goal is to determine whether economic inequality influences racial and ethnic differences in marriage rates, and to explore how these factors intersect with age to influence marriage patterns.
+This research is in relation to the subsequent theory section, which will work to connect and base these questions through Social Stratification Theory and Life Course Theory.
+
+```{r, echo=F}
+library(DiagrammeR)
+
+DiagrammeR::grViz("
+digraph relationships {
+  graph [layout = dot, rankdir = LR]
+
+  # Define nodes
+  node [shape = ellipse, style = filled]
+  X1 [label = 'race (X1)', color = lightblue]
+  X2 [label = 'rincome (X2)', color = lightblue]
+  X3 [label = 'age (X3)', color = lightblue]
+  Y [label = 'marital (Y)', fillcolor = lightblue, fontcolor = black]
+
+  # Define edges (relationships)
+  X1 -> Y
+  X2 -> Y
+  X3 -> Y
+}
+")
+
+```
+
+## Research Question
+
+Are differences in marriage rates among young adults (ages 20–35) across racial and ethnic groups shaped more by economic inequality?
+
+# Theory
+
+As this study seeks to examine marriage rates and outcomes among individuals aged 20 to 35, with a focus on understanding disparities across race, income, and age.
+Prior research and social commentary suggest that marriage appears more common among White individuals compared to Black individuals, highlighting persistent racial differences in marital patterns.
+Income and economic resources are also central to marriage decisions, as individuals often marry within similar socioeconomic brackets.
+Age is an important factor, as marriage is increasingly delayed among young adults due to extended education, career development, and shifting social norms.
+Examining these variables provides a foundation for applying Social Stratification Theory and Life Course Theory, which help explain how structural inequalities and life stage trajectories influence marriage outcomes.
+
+**Social Stratification Theory Explanation and Connection to Variables**
+
+Social stratification is essentially the way society groups and organizes its members into ranked layers, strata, or tiers based on factors like social status, overall wealth, income, education, and other related markers.
+It is crucial to acknowledge, that these layers are not just symbolic, but can have an ingrained and lasting impact on both familial and individual livelihoods over time.
+Being separated into different classes can shape a person’s opportunities, privileges, and overall well-being across the course and overall journey of life.
+Typically, higher levels of power, income, status, and wealth create a clear distinction, pushing those who benefit into the smaller, upper-level classes.
+Conversely, lacking these resources often moves individuals into the larger lower-level classes, which tend to face more persistent challenges.
+Middle-class groups fall somewhere between these extremes: not poverty-stricken, but not overly abundant in wealth or status accumulation either.
+How does this connect to my variables and research question framing?
+Reiterating the research question about if differences in marriage rates among young adults (ages 20–35) across racial and ethnic groups shaped more by economic inequality, the chosen variables of focus are race, reported income (rincome), and age and how each relate to social stratification playing out in real-world patterns of marital status.
+
+*Income (rincome)*
+
+Social stratification theory connects most directly to the rincome variable.
+Money, along with wealth accumulation more broadly, is a core factor in differentiating one class from another.
+@ebscoStratification In the United States, higher income generally translates into greater influence and stability, shaping how people navigate major life decisions.
+When it comes to marriage, the presence or absence of financial resources can strongly influence whether young adults feel ready to marry.
+Weddings can be extremely expensive, especially for those opting for a traditional church or venue-style celebration, catering, and so on.
+Many couples today turn to do-it-yourself, more affectionally known as DIY, strategies to cut costs.
+According to Fidelity, the average wedding in 2024 costs around \$33,000.
+@fidelityWedding And that figure reflects only the wedding itself, we still have to consider the honeymoon, establishing a home together, furniture, and general household expenses.
+All of these factors make income a major player in shaping marital outcomes.
+
+*Race*
+
+Unsurprisingly, race has had a lasting and deeply structural impact on where people fall within the class hierarchy.
+Black and brown communities were subjected to slavery in the United States for nearly 250 years, noting that even after the Declaration of Independence and the establishment of the U.S. as an official entity, slavery continued for roughly another 89 years.
+This long history has a profound impact on where individuals may fall on the socioeconomic “totem pole,” or within the stratification system.
+Because the dataset captures only Black and White individuals, the analysis focuses specifically on these two groups.
+Black Americans have faced systemic and legislative oppression since the moment they were forcibly brought to U.S. soil in chains.
+As a result, many Black communities continue to experience higher rates of poverty and are more often represented in the lower classes than the upper ones, although it is important to acknowledge that Black wealth has become more pronounced in recent years compared to the past.
+
+*Age*
+
+Age also ties into stratification, though in a slightly different way.
+Young adulthood (20–35) is a period where people are typically finishing school, establishing careers, or working toward financial independence.
+Because economic resources and class position change over time, age can influence the extent to which someone feels stable enough, financially, socially, or emotionally, to get married.
+In short, age helps situate individuals within both the life course and the class structure, shaping how these factors intersect with marriage decisions.
+
+**Life Course Theory Explanation and Connection to Variables**
+
+As life course theory is a sociological framework that examines how individual experiences and contexts shape development over time, it emphasizes the importance of historical timing, personal choices, and social relationships in influencing life trajectories, highlighting how life transitions such as education, employment, and family formation interact with broader societal factors (EBSCO, n.d.).
+@ebscoLifeCourse This perspective helps explain how race, age, and income combine to influence marriage patterns, especially among young adults.
+
+Concerning race, historical racial oppression has shaped opportunities and life trajectories for Black Americans.
+Centuries of slavery, segregation, and systemic discrimination have limited access to wealth, education, and economic resources, while White Americans historically benefited from structural advantages.
+Within a life course framework, these structural inequities influence transitions into adulthood, including when and whether individuals marry (Bloome & Ang, 2020; Nakosteen & Zimmer, 2019).
+@bloome2020marriage @nakosteen2019latent
+
+Concerning age, young adulthood (ages 20–35) is a period of critical transitions, such as completing education, establishing a career, and achieving financial independence.
+Life course theory emphasizes that timing matters: individuals at different ages experience distinct opportunities and constraints.
+Younger adults are often still building economic and social stability, which can delay marriage or affect relationship trajectories (EBSCO, n.d.).
+@ebscoLifeCourse
+
+Concerning income, economic resources strongly influence life course trajectories.
+Younger adults typically earn less as they are early in their careers or pursuing higher education, affecting readiness for marriage.
+Life course theory explains how these economic realities interact with age and race to shape family formation.
+Empirical evidence indicates that marriage propensities are closely tied to economic stability, and latent earning capacity strongly predicts marriage outcomes.
+Among Black women, marriage rates are affected not simply by race but by the distribution of potential spouses’ earnings; higher-earning Black men are more likely to marry (Nakosteen & Zimmer, 2019).
+@nakosteen2019latent
+
+By situating race, age, and income within a life course framework, this theory helps to provide a dynamic understanding of how structural and personal factors intersect to influence marriage patterns, clarifying why differences in marriage rates among young adults may reflect both economic inequality and historical racial inequities.
+
+# Method
+
+The General Social Survey (GSS) is a nationally representative survey of U.S. adults conducted by NORC at the University of Chicago since 1972.
+Its purpose is to collect detailed information on Americans’ demographic characteristics, social behaviors, opinions, and attitudes over time.
+The GSS has become one of the most widely used datasets in sociology, political science, and related fields because of its high-quality sampling and longitudinal design.
+For this study, a curated version of the GSS known as the gss_cat subset was used.
+This subset includes a selection of categorical and numerical variables that are commonly analyzed in social science research, making it more manageable while retaining the representativeness of the full dataset.
+The subset draws on survey responses collected between 2000 and 2014, with data gathered every other year.
+@rdocGSS @norcGSS
+
+The dataset includes several key variables relevant to this analysis.
+Year records the year the survey was administered, providing temporal context for the responses.
+Age is a numerical variable measured in years, with the maximum age truncated at 89 for confidentiality.
+Marital status (Marital) is a categorical variable that records whether respondents are “Never married,” “Separated,” “Divorced,” “Widowed,” or “Married,” with non-responses coded as “No answer.” Race is categorical and includes two groups: “Black” and “White.” Reported income (Rincome) is also categorical, reflecting income ranges such as “\$25,000 or more,” “\$20,000–\$24,999,” “\$15,000–\$19,999,” down to “less than \$1,000,” as well as responses like “Not applicable,” “No answer,” “Don’t know,” and “Refused.”
+
+In addition to demographic and economic variables, the subset includes several social and political variables.
+Party affiliation (PartyID) indicates respondents’ political party alignment.
+Religion (Relig) and Denomination (Denom) capture religious identity and specific religious affiliation, respectively.
+Behavioral variables are also included, such as hours of television watched per day (TVhours), which provides insight into daily media consumption patterns.
+Together, these variables allow researchers to examine a wide range of relationships between demographic, social, and behavioral factors.
+
+The gss_cat subset retains the same sampling framework as the full GSS, ensuring that analyses conducted using this subset remain nationally representative.
+Using this dataset, researchers can explore patterns such as the relationship between race, income, age, and marital status, as well as interactions with political and religious variables, while relying on a high-quality, publicly available source of social survey data.
+This makes gss_cat an ideal resource for investigating social stratification and life course factors that influence marriage outcomes among young adults.
+The definitions and dataset were obtained from the General Social Survey, NORC at the University of Chicago, 2000–2014.
+
+# Analysis
+
+By examining the basic structure and distribution of each variable, initially the most pronounced dataset finding that stood out was the racial imbalance: White respondents far outnumbered Black respondents.
+This pattern is common in many national datasets, but it also highlights how certain groups can be overrepresented in social research while others are overshadowed.
+This imbalance matters because if one group dominates the sample, trends may appear stronger or weaker simply due to sample size rather than reflecting actual social realities.
+Income categories also showed considerable variation but were not ideal for precise analysis.
+As a point of reference, the highest income category was listed as \$25,000 or more, which is an extremely broad range.
+According to Census.gov, the median household income in 2024 was \$83,730, highlighting the limitations of this categorization.
+Additionally, responses such as “Don’t know” or “Refused” provided little useful information for interpreting economic conditions.
+Marital status and age, by contrast, followed expected patterns: older respondents were more likely to be married, while younger respondents tended to cluster in the “never married” category.
+This initial exploration sets the stage for understanding how these variables interact across groups and informs the subsequent analysis.
+
+With additional insight into the distributions, the following relationships between the relationships were visualized.
+Although it is important to note, this dataset is skewed toward middle-aged and older adults, with a median age of 46 and relatively few respondents in the 25–35 range The first quartile age range is 33.
+As a result, patterns and insights gleaned from this specific dataset may not fully reflect the experiences of the target young adult population.
+
+*Categorical-Numeric Relationships*
+
+Concerning the race and age variables, age distributions differed across racial groups, with White respondents skewing slightly older on average.
+The median ages highlight this pattern: Other respondents have a median age of 37, Black respondents 42, and White respondents 48.
+This matters because age is strongly associated with marital status—older individuals are generally more likely to be married.
+However, it’s important to note that these median ages are generally older than the target age range of 25–35 for this study.
+As a result, the patterns observed in the full dataset may not fully capture the experiences of young adults, and any interpretations regarding marriage outcomes for this group should be considered in light of this limitation.
+
+Concerning the marital status and age variables, the age gap across marital categories was very pronounced.
+The “never married” category was the youngest, ranging roughly from 25 to 41, with a median age of 30.
+The “separated” group ranged from about 35 to 55, with a median of 44, while the “married” category started in the mid- to late-30s and extended into the 60s, overlapping somewhat with the “divorced” group.
+This pattern highlights that married respondents in this dataset are generally older, whereas those who have never married group together at a younger age range.
+Therefore, to note, any analysis of marital outcomes across racial groups should take this age distribution from the dataset into account to avoid misinterpretations.
+
+Concerning the income and age variables, the youngest median age is found in the \$1,000–\$2,999 income category, with a median of 29.
+Most of the lower income categories also skew younger, generally falling in the mid- to late-30s.
+In contrast, the highest income category in this dataset, \$25,000+, has a median age in the early- to mid-40s, reflecting the typical trajectory of earnings increasing with age.
+This pattern highlights how age and income are intertwined, which is important to consider when analyzing marital outcomes across income levels.
+
+*Categorical-Categorical Relationship*
+
+Concerning the marital status and race variables, while there is a substantial discrepancy in sample size between White and Black participants, it is important to note the differences in marital status distributions within each group.
+Among Black respondents, the largest category was “Never married,” followed by “Married,” with “Divorced” coming in third.
+In contrast, the overwhelmingly larger White respondent group had “Married” as the largest category, over double the size of their “Never married” group and just shy of their “Divorced” category, indicating that at some point, marriage had occurred for many.
+These patterns highlight that marital experiences and timing differ across racial groups, even within the limitations of this dataset.
+
+Statistical Tests for Categorical Relationships To move beyond visual impressions, I ran chi-square tests for each pair of categorical variables: • Race × Marital Status • Race × Income • Marital Status × Income In all cases, the chi-square tests indicated significant associations.
+That means the patterns we saw visually aren’t just random—they’re statistically meaningful.
+Of course, chi-square tests don’t tell us why these relationships exist, only that the distributions differ in non-random ways.
+But taken together with the visuals, these results strengthen the idea that race, income, and marital status are intertwined.
+
+*Modeling Patterns with a Linear Regression*
+
+Furthermore, to explore how these variables interact when considered together, a simple linear model was ran taken into account age \~ marital + rincome + race.
+A linear regression was conducted to examine how age is predicted by marital status, reported income (rincome), and race.
+The overall model was highly significant (F(22, 21,384) = 663.8, p \< 2.2 × 10⁻¹⁶) and explained about 40.6% of the variance in age (R² = 0.406).
+Looking at marital status, being “Never married” was associated with a significantly younger age (β = -17.39, p \< 0.001), while being “Widowed” predicted an older age (β = 15.13, p \< 0.001) which was also seen in earlier boxplots.
+Other marital categories did not differ significantly from the baseline category.
+For income, younger ages were more strongly represented in lower income categories, especially the \$1,000–\$2,999 bracket (β = -6.33, p \< 0.001), while several mid-range income categories also predicted younger ages compared to the reference group.
+The highest income category (\$25,000+) did not significantly differ from the reference.
+Race was also a significant predictor, as both Black (β = 4.23, p \< 0.001) and White (β = 5.81, p \< 0.001) respondents were older relative to the baseline race group.
+Overall, the model reinforces earlier observations: age is strongly associated with marital status and income, and these relationships must be considered when analyzing marriage patterns across racial and economic groups.
+The large sample size makes these estimates reliable, though 76 missing age observations were deleted from the analysis.
+
+## Hypothesis
+
+The hypotheses related to the research question, broken down by variable, are as follows:
+
+The hypothesis for race and marital status is that White individuals are more likely to marry than Black individuals.
+This difference is partly due to historical and systemic inequalities that have limited economic and social opportunities for Black populations.
+Such structural factors help explain the persistent racial disparities in marriage rates.
+
+The hypothesis for income and marital status is that individuals tend to marry others with similar economic resources.
+High-income earners are more likely to marry other high earners, while lower-income individuals often marry within comparable income brackets.
+This pattern of “matching on earnings” reinforces existing socioeconomic patterns in marriage.
+
+The hypothesis for age and marital status is that marriage is increasingly delayed as young adults pursue higher education, build careers, and achieve financial independence.
+Changes in social norms, including reduced economic necessity to marry and evolving attitudes toward marriage, contribute to lower marriage rates among younger adults.
+
+# Findings
+
+Recounting findings, analysis revealed differences in marital status across racial and economic groups.
+Among Black respondents, the largest category across nearly all income ranges was “Never married,” whereas for White respondents, “Married” was the most common category.
+Marriage rates for Black respondents increased slightly in the highest income bracket (\$25,000+), suggesting that economic resources may modestly raise the likelihood of marriage within this group.
+This pattern aligns with sentiments trends noted in the literature: “marriage declines are particularly steep among people from low-income backgrounds,” and “most racial differences in marriage occur among people from similar socioeconomic backgrounds” (Bloome & Ang, 2020).
+@bloome2020marriage
+
+### Age and Income Context
+
+Notably, younger respondents were concentrated in lower income categories (\$1,000–\$2,99+), while older respondents tended to appear in higher income categories (\$25,000+).
+This may indicate that age and economic resources are intertwined, with younger adults generally having less income.
+This relationship helps to contextualize the observed differences in marital status: lower-income, younger Black respondents are less likely to be married, whereas older, higher-income White respondents are more likely to have married.
+
+### Statistical Support
+
+Chi-square tests confirmed significant associations between race, income, and marital status, highlighting that the observed differences are not necessarily random.
+Even so, the linear regression analysis further emphasized that marital status and income significantly predict age, reinforcing the intertwined relationships between these variables.
+Taken together, these patterns suggest that economic inequality is one factor influencing marriage rates across racial groups, even if the dataset’s age skew limits direct conclusions about young adults.
+Yet, it may not be the only one, According to Bloome and Ang, “racial differences in cohort trends cannot be reduced to differences in economic backgrounds; even among people with relatively high-income parents, lifetime marriage chances decline more among Black people than White people” (Bloome & Ang, 2020).
+@bloome2020marriage
+
+\newpage
+
+```{r, include=F, warning=F, messages=F}
+# install the tidyverse package
+#install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+
+
+# load the libraries needed for today's analyses
+library(tidyverse)
+library(dplyr)
+library(critstats)
+library(ggplot2)
+library(dplyr)
+library(corrplot)
+library(car)
+library(lmtest)
+library(mvnormtest)
+library(ggpubr) # combined plots
+library(vcd) # mosaic plots
+
+## update packages if needed; remove \# to run code
+# update.packages("package-name")
+```
+
+```{r, include=F, warning=F, messages=F}
+#data(package="") # dataset documentation
+??gss_cat
+
+# gss_cat - sample categorical variables from the General Social Survey
+# year, age, marital, race, rincome, partyid, relig, denom, tvhours
+
+gss <- gss_cat # assign dataset to main dataframe 
+
+```
+
+```{r, include=F, warning=F, messages=F}
+#install.packages("groupdata2")
+library(groupdata2)
+gs <- downsample(gss, cat_col = "race") # downsampled gss 
+#View(gs)
+
+
+
+```
+
+```{r, include=F, warning=F, messages=F}
+# view the structure of your data
+str(gss)
+
+# view the top and bottom of your data
+head(gss)
+tail(gss)
+
+# gather counts for your categorical data
+table(gss$race)
+#Other          Black          White Not applicable 
+#1959           3129          16395              0 
+
+
+table(gss$rincome)
+
+table(gss$marital)
+
+table(gss$age)
+
+
+# gather descriptive statistics for your numeric variables
+gss %>%
+  select(age) %>% 
+  summary()
+```
+
+```{r, include=F, warning=F, messages=F}
+#Categorical-Numeric relationships
+#Categorical: race, marital, rincome
+#Numeric: age
+
+## Race vs Age
+ggplot(gss, aes(x = race, 
+                         y = age, 
+                         fill = race)) +
+  geom_boxplot() +
+  labs(title = "Age Distribution by Race")
+```
+
+```{r, include=F, warning=F, messages=F}
+## Marital Status vs Age (sorted by median age)
+gss %>%
+  mutate(marital = reorder(marital, age, median)) %>%
+  ggplot(aes(x = marital, y = age, fill = marital)) +
+  geom_boxplot() +
+  coord_flip() +  # Better readability for long job titles
+  labs(title = "Age Distribution by Marital Status") +
+  theme(legend.position = "none")
+```
+
+```{r, include=F, warning=F, messages=F}
+## Rincome vs Age
+gss %>%
+  mutate(rincome = reorder(rincome, age, median)) %>%
+  ggplot(aes(x = rincome, y = age, fill = rincome)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(title = "Reported Income Distribution by Age") +
+  theme(legend.position = "none")
+
+
+```
+
+```{r, include=F, warning=F, messages=F}
+
+#Categorical-Categorical relationship
+
+#Categorical: race, marital, rincome - Numeric: age
+
+
+# bar chart of the categorical relationships
+## Marital Status and Race 
+ggplot(gss, aes(x = race, fill = marital)) +
+  geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Marital Status Distribution Across Races",
+       x = "Race", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+```
+
+```{r, include=F, warning=F, messages=F}
+# We can then conduct a chi-square test to see if there is a relation.
+## Chi-square test
+chisq.test(gss$race, gss$marital)
+```
+
+```{r, include=F, warning=F, messages=F}
+# bar chart of the categorical relationships; x,job y,gender
+## Race and Rincome 
+ggplot(gss, aes(x = rincome, fill = race)) +
+  geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Reported Income Distribution Across Races",
+       x = "Race", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+```
+
+```{r, include=F, warning=F, messages=F}
+# We can then conduct a chi-square test to see if there is a relation.
+## Chi-square test
+chisq.test(gss$race, gss$rincome)
+```
+
+```{r, include=F, warning=F, messages=F}
+# bar chart of the categorical relationships
+# x,marital y,rincome
+## Marital Status and Rincome 
+ggplot(gss, aes(x = rincome, fill = marital)) +
+  geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Marital Status Distribution Across Reported Income Ranges",
+       x = "Rincome", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+```
+
+```{r, include=F, warning=F, messages=F}
+# We can then conduct a chi-square test to see if there is a relation.
+## Chi-square test
+chisq.test(gss$rincome, gss$marital)
+```
+
+```{r, include=F, warning=F, messages=F}
+
+#Visualizing the combined relationships
+
+#Categorical: race, marital, rincome
+
+#Numeric: age
+
+
+## Salary ~ Experience faceted by Gender
+### Age, marital status, race
+ggplot(gss, aes(x = race, y = age)) +
+  geom_point(aes(color = marital)) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~marital) +
+  labs(title = "Marital Status-Age Relationship by Race")
+```
+
+```{r, include=F, warning=F, messages=F}
+ggplot(gss, aes(x = marital, y = age, color = race)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Marital Status-Age Relationship by Race")
+```
+
+```{r, include=F, warning=F, messages=F}
+library(DiagrammeR)
+
+DiagrammeR::grViz("
+digraph relationships {
+  graph [layout = dot, rankdir = LR]
+
+  # Define nodes
+  node [shape = ellipse, style = filled]
+  X1 [label = 'race (X1)', color = lightblue]
+  X2 [label = 'rincome (X2)', color = lightblue]
+  X3 [label = 'age (X3)', color = lightblue]
+  Y [label = 'marital (Y)', fillcolor = lightblue, fontcolor = black]
+
+  # Define edges (relationships)
+  X1 -> Y
+  X2 -> Y
+  X3 -> Y
+}
+")
+
+```
+
+```{r, include=F, warning=F, messages=F}
+# Fit the model
+model <- lm(age ~ marital + rincome + race, data = gss)
+
+# Get the summary of the model
+summary(model)
+```
+
+```{r, include=F, warning=F, messages=F}
+# Linearity and homoscedasticity
+plot(model, which = 1)
+```
+
+```{r, include=F, warning=F, messages=F}
+# Normality of residuals
+plot(model, which = 2)
+```
+
+```{r, include=F, warning=F, messages=F}
+# Influential points
+plot(model, which = 4)
+```
+
+### 
+
+```{r, include=F, warning=F, messages=F}
+# Additional tests to examine differences by groupings
+## ANOVA: Job Title vs Salary
+summary(aov(age ~ marital, data = gss))
+```
+
+# Conclusion
+
+In summay, this research looked at whether differences in marriage rates among young adults (ages 20–35) across racial groups are influenced by economic inequality.
+While the dataset does indeed have limitations, especially its underrepresentation of younger adults and disparity between Black and White respondents the findings tend to align with broader research showing that inequalities, historical discrimination, and access to economic resources play a role in shaping marital status.
+The data suggests that younger and lower-income Black respondents are less likely to be married compared to their White and higher-income peers, though marriage rates do increase somewhat with higher income.
+The patterns highlight how race, age, and economic resources intersect and can shape marriage outcomes.
+Ultimately, understanding these intersections is key to addressing current and future disparities in marriage patterns across racial and economic groups.
+
+\newpage
+
+# References

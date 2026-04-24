@@ -1,0 +1,411 @@
+---
+title: "Lab 2 - Data 202"
+author: "Raven Warner"
+date: "12 October 2025"
+output:
+  html_document:
+    theme: flatly
+  editor_options:
+    markdown:
+    wrap: sentence
+---
+
+
+# Purpose
+- Examine the relationship between race, Christianity (relig), and income (rincome) in the United States using the `gss_cat` dataset. Religion serves as a fundamental principle and backbone for many social justice movements today. The moral values shaped by religious upbringing often influence advocacy for equity and justice within communities and across society. This study places a special emphasis on the intersection of income, race, and religion, focusing specifically on Christians. Future analyses could expand to include comparisons across other religions to further enhance this study. Primarily, my commentary on the results of this analysis will be featured in the *Reports* section.
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,  # Suppress messages
+                      warning = FALSE)
+```
+
+## Imports
+```{r }
+# install the tidyverse package
+# install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+
+# load the libraries needed for today's analyses
+library(tidyverse)
+library(dplyr)
+library(critstats)
+
+## update packages if needed; remove # to run code
+# update.packages("package-name")
+
+```
+
+
+## Load dataset
+``` {r}
+# ??gss_cat dataset documentation
+
+# gss_cat - sample categorical variables from the General Social Survey
+# year, age, marital, race, rincome, partyid, relig, denom, tvhours
+
+gss <- gss_cat # assign dataset to main dataframe
+```
+
+## Initial Dataset Exploration
+``` {r, prework}
+# summary
+summary(gss)
+```
+
+
+
+
+```{r}
+# glimpse
+glimpse(gss)
+```
+```{r}
+head(gss)
+tail(gss)
+```
+
+
+## Part 2 - Dataset Cleaning/Modification and Analysis
+- Modified the dataset to work within bounds of research analysis. 
+- Removed non-Christian survey answers (Assumption: For religion, "Christian" is the only value that counts as Christian. Protestant, Catholic, etc. were removed from the dataset)
+- "Other" type answer were removed from the rincome (reported income) variable. I am only looking at answers with reported income, not "Don't know" or "None" etc.
+- Responses by self-reported "Black" and "White" individuals are the focus of this analysis. "Other" etc. was removed. 
+- Utilized the droplevels() function to remove filtered content from view
+``` {r}
+gsd = gss_cat%>%
+  na.omit() %>%
+  select(year, race, rincome , relig, age) %>%
+  filter(relig %in% c("Christian"))  %>% # filter relig column to only include self-reported Christian participants
+  filter(race %in% c("White", "Black")) %>% # filter race column to only include self-reported Black or White participants
+  filter(!rincome %in% c("No answer", "Refused", "Not applicable", "Don't know")) # filter rincome column to only include actual income ranges only. Removed "Other" type answers for sake of study
+
+  
+
+gsd = droplevels(gsd) #removed multiple variable columns, and NA values
+gsd
+
+# Archived code (not for grading, personal use only)
+  #filter(!relig %in% c("No answer", "Don't know", "None", "Not applicable", "Other")) %>%
+```
+
+
+
+### Create a table of variables from filtered dataset
+
+- The table() function counts how many times each unique value appears in a column, creating a frequency table. 
+- The following shows the number of respondents in each race, income category, and religious group (Christian), respectively.
+
+```{r}
+table(gsd$race)
+table(gsd$rincome)
+table(gsd$relig)
+
+```
+### Create a table of variables from filtered dataset (proportions)
+- Around 77% of the respondents are White, while only around 22.8% of respondents are Black.
+- Over 53% of the respondents make over $25,000. The next overall highest category is $20,000-24,999. 
+```{r}
+prop.table(table(gsd$race))
+prop.table(table(gsd$rincome))
+prop.table(table(gsd$relig))
+
+
+```
+
+
+
+## Visualize
+- The visualizations help see differences between Black and White Christians in income distribution.
+
+Distribution of Race
+- Out of the 223 Christian respondents, 172 reported a race of "White" while 51 reported "Black" as their race.
+
+```{r}
+ggplot(gsd, aes(x = race, fill = race)) +
+  geom_bar(width = 0.7, color = "black") +
+  geom_text(stat = "count", aes(label = after_stat(count)), 
+            vjust = -0.5, color = "black", size = 3.5) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(x = "Race/Ethnicity", y = "Count", title = "Distribution of Race") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))
+```
+
+
+Distribution of Religion
+- There are approximately 223 Christians in the abbreviated dataset.
+
+```{r, fig.height=8, fig.width=10}
+ggplot(gsd, aes(x = relig, fill = relig)) +
+  geom_bar(width = 1,  color = "black") +
+  geom_text(stat = "count", aes(label = after_stat(count)), 
+            vjust = -0.8, color = "black", size = 3.5) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(x = "Religion", y = "Count", title = "Distribution of Religion") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, .15))) 
+
+```
+
+
+### Proportions of Reported Income by Race (Christian Respondents) - Supplementary Visual
+ This chart shows the percentages of the reported income by race among Christian respondents.
+```{r}
+
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+# Compute proportions by income within race
+gsd_prop <- gsd %>%
+  count(rincome, race) %>%
+  group_by(rincome) %>%
+  mutate(prop = n / sum(n))
+
+# Plot stacked 100% bar chart with percentage labels
+ggplot(gsd_prop, aes(x = rincome, y = prop, fill = race)) +
+  geom_col(position = "fill") +
+  geom_text(
+    aes(label = percent(prop, accuracy = 1)),        # show percentage
+    position = position_fill(vjust = 0.5),           # center inside each segment
+    color = "white",
+    size = 3
+  ) +
+  scale_y_continuous(labels = percent) +
+  labs(
+    title = "Proportion of Reported Income by Race (Christian Respondents)",
+    x = "Income Category",
+    y = "Percentage Within Race Group",
+    fill = "Race"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+
+```
+
+
+### Actual Counts of Reported Income by Race (Christian Respondents) - Supplementary Visual
+- This chart shows the actual counts of the reported income by race among Christian respondents. This chart is to help supplement the proportions on the above chart, providing more insight into the actual count associated with them. This helps to see the numbers more tangibly.
+
+```{r}
+library(ggplot2)
+
+ggplot(gsd, aes(x = rincome, fill = race)) +
+  geom_bar() +  # ggplot counts occurrences automatically
+  geom_text(
+    stat = "count",                    # counts computed by ggplot
+    aes(label = ..count..),            # ..count.. accesses the computed count
+    position = position_stack(vjust = 0.5),
+    color = "white",
+    size = 3
+  ) +
+  labs(
+    title = "Number of Respondents by Income and Race (Christian Respondents)",
+    x = "Income Category",
+    y = "Count",
+    fill = "Race"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+
+
+```
+
+
+```{r}
+
+
+
+
+```
+
+
+
+
+
+# Analysis
+Chi-squared test results
+- Not statistically significant difference in income distribution between Black and White Christians in this sample (p > 0.05).
+```{r}
+chisq.test(table(gsd$race, gsd$rincome))
+```
+
+
+Load the descr and Hmisc libraries. Install packages as needed.
+```{r}
+#install.packages("descr")
+#install.packages("Hmisc")
+library(descr)
+library(Hmisc)
+```
+
+## Sample size
+
+Get a count of the sample size.
+- This is the count of the total respondents for the abbreviated dataset. 
+
+```{r}
+count(gsd)
+```
+
+## Relative frequencies
+
+Get relative frequencies by the `race` variable.
+
+```{r}
+gsd %>% 
+  count(race) %>% 
+  mutate(prop = prop.table(n))
+```
+
+Get relative frequencies by the `relig`` variable.
+
+```{r}
+gsd %>% 
+  count(relig) %>% 
+  mutate(prop = prop.table(n))
+```
+
+Get relative frequencies by the `rincome``` variable.
+
+```{r}
+gsd %>% 
+  count(rincome) %>% 
+  mutate(prop = prop.table(n))
+```
+
+
+## Crosstab
+
+Get a crosstab of the `race` and `rincome` variables.
+
+```{r}
+crosstab(gsd$rincome, gsd$race, plot=F)
+```
+
+Standardize the frequencies.
+
+```{r}
+crosstab(gsd$rincome, gsd$race, plot=F, prop.c=T)
+```
+
+Create a crosstab with raw frequencies.
+
+```{r}
+crosstab(gsd$rincome, gsd$race, plot=T)
+```
+
+Gather the expected values.
+
+```{r}
+crosstab(gsd$rincome, gsd$race,
+         expected=T, #Add expected frequency to each cell
+         plot=T)
+```
+
+### Add the chi-square contributions.
+- In this analysis, The Black respondents making $25,000+ are less than expected, so this group “stands out” a bit. The White respondents making $25,000+ are slightly more than expected, but not as surprising. In 7 out of 12 income categories, Black respondents are fewer than expected, meaning that in most income ranges, Black respondents are underrepresented compared to what we would expect if race didn’t affect income.
+
+```{r}
+crosstab(gsd$rincome, gsd$race,
+         expected=T, #Add expected frequency to each cell
+         prop.chisq = T, #Total contribution of each cell 
+         plot=F)
+```
+
+
+
+
+## Reports (Parts 1-2)
+**- Analysis, commentary, and lab findings are located in *this* section.**
+
+### Report 1.1 - What dataset have you decided to use?
+- I am using the **gss_cat dataset.** - A sample of categorical variables from the General Social Survey. The General Social Survey (GSS) is a biennial survey that collects data on American society to monitor and explain trends in opinions, attitudes, and behaviors. 
+
+
+### Report 1.2 - Which variables from your dataset will be analyzed?
+- I will be analyzing 3 primary variables: race, rincome (reported income), and relig (religion), with supplementary references to additional variables in the datasest when necessary or relevant. The **race** and **religion** variables are categorical, and the **rincome** variable is a numeric variable.
+
+
+### Report 1.3 - What is your research question?
+- “How do income levels differ between Black and White Christians in the U.S., and what do these differences reveal about racial economic disparities within Christian communities?”
+
+### Report 1.4 - What is your data analysis plan? Please be descriptive.
+### Data Analysis Plan
+
+1. **Filter the dataset**
+   - Keep only Christian respondents. Note: Christian responses only consisted of those who reported "Christian" for their religion.
+   - Focus only on Black and White respondents. Note: I wanted to specficially focus on Black and White respondents.
+   - Remove non-responses and unclear income answers. Note: At this time, "other" type responses were not relevant.
+
+2. **Explore the data**
+   - Use exploratory functionality like View, glimpse() and table() to obtain further understanding of the dataset, speficially in regard to the following variables: race, relig, rincome.
+   - Calculate proportions to see relative frequencies.
+
+3. **Visualize the data**
+   - Create charts for race and religion distributions.   
+   - Create charts charts for income by race, showing both **percentages** and **actual counts**.
+
+4. **Analyze relationships**
+   - Create crosstabs of `race` × `rincome`.  
+   - Examine **observed counts vs. expected counts**.  
+   - Calculate **chi-square contributions** to see which income-race cells differ most from expectation.
+
+5. **Statistical test**
+   - Conduct a **chi-squared test** to check if income distribution differs significantly between Black and White Christians.
+
+6. **Interpret results**
+   - Compare observed vs. expected counts.  
+   - Note group over/underrepresentation.
+   - Acknowledge limitations due to small sample size.
+
+
+### Report 1.5 - What are some potential limitations for your analysis?
+- While more specific reflections are captured in 1.10, I took note initially pre-analysis, that the number of Black respondents is much smaller than White respondents. This imbalance could make results appear as if White Christian respondents earn more, even if that reflects overrepresentation rather than reality. From a social justice perspective, this highlights how minority voices and experiences are often underrepresented in datasets, which can hide  inequities and the ways that underrepresentation affects livelihoods and opportunities in the U.S for the marginalized/minority communities.
+
+
+### Report 1.6 - Does your data contain missing values? If so, how have you dealt with these values?
+- While the data did not necessarily have actual blank or missing values, it did have several "Other" type categories, that for the sake of my analysis, would be considered missing values. I am looking at income, race, and religion, and while some values such as "None" is a valid 0 response, others like Don't Know and Refused, do not help further my analysis in support of exploring my research question further. For the sake of my analysis, I created a sub-dataset which an abbreviated pull of the data that, ultimately had no missing values. I only selected the participants that reported Christian, Black or White, and a specific income range. 
+
+### Report 1.7 - Please include all code used to clean and manipulate the two variables?
+- All code used to clean and manipulate is shown and annotated for clarity, above the reports section. 
+
+### Report 1.8 - What relationship, if any, exists between the two variables?
+- After exploring the data, I realized that while there is likely a more pronounced relationship between race, income, and religion in the broader population, my analysis did not capture much of a relationship within this subset. The limitations of the dataset, such as its small size and the imbalance between Black and White respondents, likely influenced these results more than the actual disparities that exist in the U.S. The chi-squared test yielded a p-value of 0.193, which is above 0.05, indicating no statistically significant association between race and income in this specific sample of Black and White Christians with reported income. Additionally, the full gss_cat dataset included many respondents who reported "None," "Refused," "Don't know," or "Not Applicable." While these responses are not numerical, they still convey important information about income patterns; for example, "None" could indicate $0 income. Observed versus expected counts show that 7 out of 12 income ranges for Black respondents were lower than expected, while the remaining ranges were higher. Ultimately, there was not much of a clear relationship to be seen, given the small, imbalanced sample. Considering the diversity of the U.S., excluding the "Other" category likely omitted additional minority and marginalized individuals who could have contributed to a more balanced and representative sample.
+
+### Report 1.9 - How do these findings relate to your research question and theory?
+
+- When I first created my research question, I was genuinely excited to explore how religion might impact income, with an added emphasis on race. As someone who values Christianity and the concepts of faith, grace, and spiritual blessings, I hoped to see whether the data would reflect that Christians are “blessed” not only spiritually but also financially. To be honest, the results were very underwhelming, and I questioned redoing the entire lab. The findings do not provide strong evidence to support a correlation between religious affiliation and financial stability or affluence.  
+
+- The data highlighted the **lack of a clear relationship** between the variables I analyzed, race, income, and Christianity, rather than supporting the idea of an actual connection. Specifically, my analysis focused on those respondents who self-reported as Black and White Christians. Though, a broader comparison including non-Christians or agnostic individuals would likely provide a more complete picture. A picture that would likely speak more in-depth to the relationship that must exist between race, rincome, and relig.  
+
+- Contextually, I chose to focus on religion in relation to income and race because spirituality has historically fueled social justice movements in the U.S. For example, think of figures like **Martin Luther King Jr., C.T. Vivian**, or more recently, **Pastor Jamal Bryant**, who led a national boycott against Target to protest scaling back diversity, equity, and inclusion initiatives. My goal was to see if there might be a “divine correlation” between income, race, and Christianity visible in the data that could hypothetically inform efforts to support those advancing social justice. After all, typically money and other financial resources are essential to sustaining such work, and I was curious whether the dataset reflected that potential connection. While my specific analysis did not reveal a correlation, it highlighted the importance of having sound, balanced, and clean data when conducting studies like this. I am concerned that skewed data, particularly underrepresentation of certain groups, can lead to decisions and outcomes that unfairly disadvantage those affected.
+
+### Report 1.10 - What limitations exist as a result of the data analysis?
+- **Small sample size:** - Only 223 respondents were included, with 51 Black and 172 White participants, which limits the statistical power and generalizability of the results. The imbalanced group of White and Black respondents likely affect the comparisons and observed patterns amongst the respondent data.
+- **Christian-only focus:** Creating a subset of the initial dataset to only include self-reported Christians likely means the findings cannot be generalized to other religious groups or the broader population. Furthermore, it brings on the question of what it means to be a Christian to some individuals. That definition, by individual, is likely skewed or varies among each and every respondent. Therefore, what I may define as Chrisian in this study, may not directly align with how a respondent defined Chrisian. Therefore, in comparison to my perspective, there could be more or less Christians amongst the Black and White individuals, but were not explicitiy stated or reported due to invidiual understanding.
+- **Categorical income ranges:** Using income ranges rather than exact income values reduces precision and may mask finer differences in income distribution. I was not able to do numerical comparisons with the income ranges, verses exact income values, and that significantly limited my ability to analyze further without fabricating income. 
+- **Observational data:** The data is self-reported, and humans come with error and bias, therefore further limiting the dataset. 
+
+
+
+

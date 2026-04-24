@@ -1,0 +1,286 @@
+---
+title: "Lab3 - GSS"
+author: "Raven Warner"
+date: "2025-11-12"
+output:
+  html_document:
+    theme: flatly
+  editor_options:
+    markdown:
+    wrap: sentence
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,  # Suppress messages
+                      warning = FALSE)
+```
+
+
+
+## Imports
+```{r }
+# install the tidyverse package
+#install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+
+
+# load the libraries needed for today's analyses
+library(tidyverse)
+library(dplyr)
+library(critstats)
+library(ggplot2)
+library(dplyr)
+library(corrplot)
+library(car)
+library(lmtest)
+library(mvnormtest)
+library(ggpubr)  # combined plots
+library(vcd)     # mosaic plots
+
+## update packages if needed; remove # to run code
+# update.packages("package-name")
+
+```
+
+
+
+## Load dataset
+``` {r}
+#data(package="") # dataset documentation
+??gss_cat
+
+# gss_cat - sample categorical variables from the General Social Survey
+# year, age, marital, race, rincome, partyid, relig, denom, tvhours
+
+gss <- gss_cat # assign dataset to main dataframe 
+
+```
+
+```{r}
+#install.packages("groupdata2")
+library(groupdata2)
+gs <- downsample(gss, cat_col = "race") # downsampled gss 
+View(gs)
+
+
+
+```
+
+# Exploratory analysis
+
+```{r, message=F, warning=F}
+# view the structure of your data
+str(gss)
+
+# view the top and bottom of your data
+head(gss)
+tail(gss)
+
+# gather counts for your categorical data
+table(gss$race)
+#Other          Black          White Not applicable 
+#1959           3129          16395              0 
+
+
+table(gss$rincome)
+
+table(gss$marital)
+
+
+# gather descriptive statistics for your numeric variables
+gss %>%
+  select(age) %>% 
+  summary()
+```
+### Categorical-Numeric relationships 
+- Categorical: race, marital, rincome
+- Numeric: age
+
+```{r, message=F, warning=F}
+## Race vs Age
+ggplot(gss, aes(x = race, 
+                         y = age, 
+                         fill = race)) +
+  geom_boxplot() +
+  labs(title = "Age Distribution by Race")
+```
+
+
+```{r, message=F, warning=F}
+## Marital Status vs Age (sorted by median age)
+gss %>%
+  mutate(marital = reorder(marital, age, median)) %>%
+  ggplot(aes(x = marital, y = age, fill = marital)) +
+  geom_boxplot() +
+  coord_flip() +  # Better readability for long job titles
+  labs(title = "Age Distribution by Marital Status") +
+  theme(legend.position = "none")
+```
+
+```{r, message=F, warning=F}
+## Rincome vs Age
+gss %>%
+  mutate(rincome = reorder(rincome, age, median)) %>%
+  ggplot(aes(x = rincome, y = age, fill = rincome)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(title = "Reported Income Distribution by Age") +
+  theme(legend.position = "none")
+
+
+```
+
+### Categorical-Categorical relationship 
+ Categorical: race, marital, rincome
+- Numeric: age
+
+```{r, message=F, warning=F}
+# bar chart of the categorical relationships
+## Marital Status and Race 
+ggplot(gss, aes(x = race, fill = marital)) +
+  geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Marital Status Distribution Across Races",
+       x = "Race", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+```
+
+We can then conduct a chi-square test to see if there is a relation.
+
+```{r, message=F, warning=F}
+## Chi-square test
+chisq.test(gss$race, gss$marital)
+```
+
+```{r, message=F, warning=F}
+# bar chart of the categorical relationships; x,job y,gender
+## Race and Rincome 
+ggplot(gss, aes(x = rincome, fill = race)) +
+  geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Reported Income Distribution Across Races",
+       x = "Race", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+```
+
+We can then conduct a chi-square test to see if there is a relation.
+
+```{r, message=F, warning=F}
+## Chi-square test
+chisq.test(gss$race, gss$rincome)
+```
+
+
+```{r, message=F, warning=F}
+# bar chart of the categorical relationships
+# x,marital y,rincome
+## Marital Status and Rincome 
+ggplot(gss, aes(x = rincome, fill = marital)) +
+  geom_bar(position = "dodge") +
+  coord_flip() +
+  labs(title = "Marital Status Distribution Across Reported Income Ranges",
+       x = "Rincome", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1))
+```
+
+
+We can then conduct a chi-square test to see if there is a relation.
+
+```{r, message=F, warning=F}
+## Chi-square test
+chisq.test(gss$rincome, gss$marital)
+```
+
+
+## Visualizing the combined relationships
+- Categorical: race, marital, rincome
+- Numeric: age
+
+
+```{r, message=F, warning=F}
+## Salary ~ Experience faceted by Gender
+### Age, marital status, race
+ggplot(gss, aes(x = race, y = age)) +
+  geom_point(aes(color = marital)) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~marital) +
+  labs(title = "Marital Status-Age Relationship by Race")
+```
+
+```{r, message=F, warning=F}
+ggplot(gss, aes(x = marital, y = age, color = race)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Marital Status-Age Relationship by Race")
+```
+
+---
+
+
+
+
+## Reports (Parts 1-2) - Section in work for paper
+**- Analysis, commentary, and lab findings are located in *this* section.**
+
+### Report 1.1 - What dataset have you decided to use?
+- I am using the **gss_cat dataset.** - A sample of categorical variables from the General Social Survey. The General Social Survey (GSS) is a biennial survey that collects data on American society to monitor and explain trends in opinions, attitudes, and behaviors. 
+
+
+### Report 1.2 - Which variables from your dataset will be analyzed?
+- I will be analyzing the following primary variables: age, race, rincome (reported income), and marital (status), with supplementary references to additional variables in the datasest when necessary or relevant. The **race**, **marital status** **rincome** variables are categorical, and the **age** variable is a numeric variable.
+
+
+### Report 1.3 - What is your research question?
+- Are differences in marriage rates among young adults (ages 25–35) across racial and ethnic groups shaped  more by economic inequality than by personal choice?
+
+### Report 1.4 - What is your data analysis plan? Please be descriptive.
+### Data Analysis Plan
+
+1. **Explore the data**
+   - Use exploratory functionality like View, glimpse() and table() to obtain further understanding of the dataset, specifically in regard to the following variables: race, marital, rincome, age.
+   - Calculate proportions to see relative frequencies.
+
+2. **Visualize the data**
+   - Create charts for distributions.   
+   - Create charts charts for income, race, etc. showing both **percentages** and **actual counts**.
+
+3. **Analyze relationships**
+   - Section in work
+   
+4.  **Statistical test**
+   - Conduct a **chi-squared test** to check if distribution differs significantly.
+
+5. **Interpret results**
+   - Compare observed vs. expected counts.  
+   - Note group over/underrepresentation.
+   - Acknowledge limitations due to small sample size.
+
+
+### Report 1.5 - What are some potential limitations for your analysis?
+- While more specific reflections are captured in 1.10, I took note initially pre-analysis, that the number of Black respondents is much smaller than White respondents. This imbalance could make results appear as if White respondents earn more, even if that reflects overrepresentation rather than reality. From a social justice perspective, this highlights how minority voices and experiences are often underrepresented in datasets, which can hide  inequities and the ways that underrepresentation affects livelihoods and opportunities in the U.S for the marginalized/minority communities.
+
+
+### Report 1.6 - Does your data contain missing values? If so, how have you dealt with these values?
+- Section in work
+### Report 1.7 - Please include all code used to clean and manipulate the two variables?
+- All code used to clean and manipulate is shown and annotated for clarity, above the reports section. 
+- Section in work
+### Report 1.8 - What relationship, if any, exists between the two variables?
+-Section in work
+
+### Report 1.9 - How do these findings relate to your research question and theory?
+- Section in work
+
+### Report 1.10 - What limitations exist as a result of the data analysis?
+- **Small sample size:** - Only 223 respondents were included, with 51 Black and 172 White participants, which limits the statistical power and generalizability of the results. The imbalanced group of White and Black respondents likely affect the comparisons and observed patterns amongst the respondent data.
+- **Categorical income ranges:** Using income ranges rather than exact income values reduces precision and may mask finer differences in income distribution. I was not able to do numerical comparisons with the income ranges, verses exact income values, and that significantly limited my ability to analyze further without fabricating income. 
+- **Observational data:** The data is self-reported, and humans come with error and bias, therefore further limiting the dataset. 
+
+
+
+
+
+
