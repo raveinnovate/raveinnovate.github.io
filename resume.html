@@ -1,140 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Science Resume</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      line-height: 1.6;
-      color: #333;
-    }
-    h1, h2 {
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 5px;
-    }
-    .section {
-      margin-bottom: 30px;
-    }
-    .subsection {
-      margin-bottom: 15px;
-    }
-    .skills-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    a {
-      color: #0073b1;
-      text-decoration: none;
-    }
-  </style>
+  <title>Resume | raveInnovate</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap"
+    rel="stylesheet">
 </head>
-<body>
 
-  <!-- CONTACT INFO -->
-  <div class="section">
-    <h1>Raven Warner</h1>
-    <p>Email: raven.warner@bison.howard.edu</p>
-    <p>
-      Link 1: <a href="https://github.com/raveinnovate">Portfolio / GitHub</a><br>
-      Link 2: <a href="https://www.linkedin.com/in/ravenwarner/">LinkedIn / Website</a>
-    </p>
-  </div>
+<body class="font-[Poppins] bg-gradient-to-t from-[#dd7002] to-[#ff6f91] min-h-screen">
 
-  <!-- SUMMARY / OBJECTIVE -->
-  <div class="section">
-    <h2>Summary / Objective</h2>
-    <p>
-      Data-driven professional with experience in machine learning, statistical analysis, and data visualization.
-      Passionate about solving complex problems using data and delivering actionable insights.
-    </p>
-  </div>
+  <!-- HEADER -->
+  <header class="bg-[#dd7002] p-4">
+    <div class="flex justify-between items-center">
+      <h1 class="text-[#5c4033] font-bold text-3xl" style="font-family: 'Playfair Display', serif;">
+        Resume
+      </h1>
 
-  <!-- EDUCATION -->
-  <div class="section">
-    <h2>Education</h2>
+      <a href="index.html" class="text-white hover:text-gray-200">
+        ← back home
+      </a>
+    </div>
+  </header>
 
-    <div class="subsection">
-      <strong> M.S. in Data Science (in-progress)</strong><br>
-      Howard University, Washington, D.C.<br>
-      Spring 2026<br>
-      Relevant Coursework: Machine Learning, Data Storytelling, Python for Data Science, Data Visualization
+  <!-- CONTENT WRAPPER -->
+  <div class="max-w-5xl mx-auto p-6 space-y-6">
+
+    <!-- CONTACT CARD -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-[#ff6f91] text-2xl font-bold mb-2">Raven Warner</h2>
+
+      <p class="text-gray-700">raven.warner@bison.howard.edu</p>
+      <p class="text-gray-700">raveinnovate@gmail.com</p>
+
+      <div class="flex flex-wrap gap-3 mt-4">
+        <a href="https://github.com/raveinnovate" target="_blank"
+          class="px-4 py-2 bg-[#ff6f91] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+          GitHub
+        </a>
+
+        <a href="https://www.linkedin.com/in/ravenwarner/" target="_blank"
+          class="px-4 py-2 bg-[#dd7002] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+          LinkedIn
+        </a>
+      </div>
     </div>
 
-    <div class="subsection">
-      <strong> B.S. in Computer Science</strong><br>
-      University of Alabama at Birmingham, Birmingham, AL<br>
-      Spring 2023<br>
-      Relevant Coursework: Algorithms, Computer Security, Programming Languages, Software Engineering
-    </div>
-  </div>
-
-  <!-- TECHNICAL SKILLS -->
-  <div class="section">
-    <h2>Technical Skills</h2>
-    <div class="skills-list">
-      <div><strong>Programming:</strong> Python, R, SQL</div>
-      <div><strong>Libraries:</strong> Pandas, NumPy, Scikit-learn</div>
-      <div><strong>Visualization:</strong> Matplotlib, Seaborn, Tableau, Power BI</div>
-      <div><strong>Databases:</strong> PostgreSQL, MongoDB</div>
-      <div><strong>Cloud:</strong> AWS</div>
-      <div><strong>Tools:</strong> Git, Docker, Jupyter</div>
-      <div><strong>Other:</strong> Graphic Design, Multimedia Design</div>
-    </div>
-  </div>
-
-  <!-- PROJECTS -->
-  <div class="section">
-    <h2>Projects</h2>
-
-    <div class="subsection">
-      <strong>HBCU Enrollment & Outcomes Data Visualization Dashboard (Tableau)</strong><br>
-      <p>
-        Designed and developed an interactive Tableau dashboard analyzing trends in Historically Black Colleges and Universities (HBCUs), focusing on enrollment, institutional characteristics, and student outcomes. Leveraged data visualization techniques to uncover disparities and highlight key performance indicators across institutions. The dashboard enables users to explore insights through dynamic filters and comparative views, supporting data-driven discussions around equity in higher education.
+    <!-- SUMMARY -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-[#ff6f91] text-xl font-bold mb-2">Summary</h2>
+      <p class="text-gray-700">
+        Data-driven professional with experience in machine learning, statistical analysis, and data visualization.
+        Passionate about solving complex problems using data and delivering actionable insights.
       </p>
-      <a href="https://public.tableau.com/app/profile/raven.warner/viz/U2_HBCUe_Viz/Dashboard12" target="_blank">Tableau Visualization</a>
-      <a href="https://public.flourish.studio/story/3393982/" target="_blank">Flourish Story</a>
     </div>
 
-    <div class="subsection">
-      <strong>Jim Crow Laws Impact Analysis Dashboard  and Story</strong><br>
-      <p>
-        Developed an interactive Tableau dashboard for a client that analyzes the historical impact of Jim Crow laws across the United States, focusing on racial segregation patterns, legal restrictions, and socio-economic disparities. Collected and structured historical and demographic data, ensuring consistency across multiple sources for accurate analysis.
-      </p>
-      <a href="https://public.tableau.com/app/profile/raven.warner/viz/fp_jimcrow/Dashboard1" target="_blank">View Project</a>
-    </div>
-  </div>
+    <!-- EDUCATION -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-[#ff6f91] text-xl font-bold mb-4">Education</h2>
 
-  <!-- PROFESSIONAL EXPERIENCE -->
-  <div class="section">
-    <h2>Professional Experience</h2>
+      <div class="mb-4">
+        <p class="font-semibold">M.S. Data Science (in progress)</p>
+        <p class="text-gray-600">Howard University • Washington, D.C. • Spring 2026</p>
+        <p class="text-gray-600 text-sm">Machine Learning • Data Storytelling • Visualization • Python</p>
+      </div>
 
-    <div class="subsection">
-      <strong>AI/ML Engineer</strong><br>
-      Booz Allen Hamilton | McClean, VA<br>
-      January 2026 - Present<br>
-      <ul>
-        <li>Utilizing agentic frameworks to enhance decision-making processes.</li>
-        <li>Please refer to LinkedIn for more info.</li>
-      </ul>
+      <div>
+        <p class="font-semibold">B.S. Computer Science</p>
+        <p class="text-gray-600">University of Alabama at Birmingham • Spring 2023</p>
+        <p class="text-gray-600 text-sm">Algorithms • Security • Software Engineering</p>
+      </div>
     </div>
 
-    <div class="subsection">
-      <strong>Software Engineer</strong><br>
-      United States Department of Defense | Maryland, USA<br>
-      August 2020 - January 2026<br>
-      <ul>
-        <li>Software Engineer in Applied Computing program</li>
-        <li>Please refer to LinkedIn for more info.</li>
+    <!-- SKILLS -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-[#ff6f91] text-xl font-bold mb-4">Technical Skills</h2>
 
-      </ul>
+      <div class="grid md:grid-cols-2 gap-3 text-gray-700 text-sm">
+        <div><strong>Programming:</strong> Python, R, SQL</div>
+        <div><strong>Libraries:</strong> Pandas, NumPy, Scikit-learn</div>
+        <div><strong>Visualization:</strong> Tableau, Power BI, Matplotlib</div>
+        <div><strong>Databases:</strong> PostgreSQL, MongoDB</div>
+        <div><strong>Cloud:</strong> AWS</div>
+        <div><strong>Tools:</strong> Git, Docker, Jupyter</div>
+      </div>
     </div>
 
-    <!-- NOTE: Customize this section using your LinkedIn profile -->
-    <!-- LinkedIn: https://www.linkedin.com/in/ravenwarner/ -->
+    <!-- PROJECTS -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-[#ff6f91] text-xl font-bold mb-4">Projects</h2>
+
+      <div class="space-y-6">
+
+        <div>
+          <p class="font-semibold text-[#5c4033]">HBCU Enrollment & Outcomes Dashboard</p>
+          <p class="text-gray-700 text-sm">
+            Interactive Tableau dashboard analyzing enrollment trends, outcomes, and institutional disparities.
+          </p>
+          <div class="flex gap-3 mt-2">
+            <a href="https://public.tableau.com/app/profile/raven.warner/viz/U2_HBCUe_Viz/Dashboard12"
+              class="text-[#dd7002] hover:underline text-sm">
+              Tableau →
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="font-semibold text-[#5c4033]">Jim Crow Laws Impact Analysis</p>
+          <p class="text-gray-700 text-sm">
+            Visualization of historical segregation patterns and socio-economic disparities across the U.S.
+          </p>
+          <div class="flex gap-3 mt-2">
+            <a href="https://public.tableau.com/app/profile/raven.warner/viz/fp_jimcrow/Dashboard1"
+              class="text-[#dd7002] hover:underline text-sm">
+              View →
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-[#ff6f91] text-xl font-bold mb-4">Professional Experience</h2>
+
+      <div class="mb-5">
+        <p class="font-semibold">AI/ML Engineer — Booz Allen Hamilton</p>
+        <p class="text-gray-600 text-sm">McLean, VA • Jan 2026 – Present</p>
+        <ul class="list-disc ml-5 text-gray-700 text-sm mt-2">
+          <li>Applied agentic AI frameworks to enhance decision systems.</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-semibold">Software Engineer — U.S. Department of Defense</p>
+        <p class="text-gray-600 text-sm">Maryland, USA • Aug 2020 – Jan 2026</p>
+        <ul class="list-disc ml-5 text-gray-700 text-sm mt-2">
+          <li>Developed software systems in applied computing environments.</li>
+        </ul>
+      </div>
+    </div>
 
   </div>
 

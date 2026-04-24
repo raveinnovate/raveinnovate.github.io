@@ -1,163 +1,153 @@
 <!doctype html>
 <html>
 
-<! -- COLORS 
-#5c4033 - brown
-#dd7002 - orange
-#38761d - green
-#ff6f91 - pink
-#1c1c1c - black-ish
-#f9f9f9 - white
-
-
--->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- GOOGLE FONTS -->
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Poppins -->
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <!-- Playfair Display -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
-    <!-- Lato -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
 </head>
 
-<body class="font-[Poppins] bg-gradient-to-t from-[#dd7002] to-[#ff6f91] h-screen">
-    <header class="bg-[#dd7002]">
-        <nav class="flex justify-between items-center w-[100%]">
-            <div class="">
-                 <h1 class="text-[#5c4033] font-bold text-3xl" style="font-family: 'Playfair Display', serif;">raveInnovate</h1>
+<body class="font-[Poppins] bg-gradient-to-t from-[#dd7002] to-[#ff6f91] min-h-screen">
 
-            </div>
-            <div
-                class="nav-links duration-500 md:static absolute bg-[#dd7002] md:min-h-fit min-h-[60vh] left-0 top-[-100%] md:w-auto  w-full flex items-center px-5">
-                <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8 text-2xl" style="font-family: 'Lato', serif;">
-                    <li>
-                        <a class="hover:text-gray-500" href="https://raveinnovate.github.io/">home</a>
-                    </li>
-                    <li>
-                        <a class="hover:text-gray-500" href="https://www.raveinnovate.tech/">about</a>
-                    </li>
-                    <li>
-                        <a class="hover:text-gray-500" href="https://www.raveinnovate.tech/contact">contact</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="flex items-center gap-6">
-                <!-- <button class="bg-[#a6c1ee] text-white px-5 py-2 rounded-full hover:bg-[#87acec]">Sign in</button> -->
-                <ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl cursor-pointer md:hidden"></ion-icon>
-            </div>
+    <!-- NAV -->
+    <header class="bg-[#dd7002] p-4">
+        <nav class="flex justify-between items-center">
+
+            <h1 class="text-[#5c4033] font-bold text-3xl"
+                style="font-family: 'Playfair Display', serif;">
+                raveInnovate
+            </h1>
+
+            <ul class="hidden md:flex gap-8 text-lg text-white">
+                <li><a class="hover:text-gray-300" href="index.html">home</a></li>
+                <li><a class="hover:text-gray-300" href="https://www.raveinnovate.tech/">about</a></li>
+                <li><a class="hover:text-gray-300" href="https://www.raveinnovate.tech/contact">contact</a></li>
+            </ul>
+
+            <ion-icon onclick="onToggleMenu(this)" name="menu"
+                class="text-3xl cursor-pointer md:hidden text-white"></ion-icon>
+        </nav>
     </header>
-    <br>
-    <div class="place-self-center my-5 max-w-xl bg-white border border-white-200 rounded-lg shadow-md dark:bg-white-800 dark:border-white-700 ">
-        <!-- <a href="#">
-            <img class="rounded-t-lg content-center" src="/docs/images/blog/image-1.jpg" alt="" />
-        </a> -->
-        <div class="p-5 content-center">
-            <img src="images/raveInnovate.png"/>
-            <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-[#ff6f91]">Welcome to raveInnovate.</h5>
-                <p style="text-align: left;"><strong>A professional space by Raven Warner.</strong></p><br>
-            </a>
-            <p class="mb-3 font-light text-gray-700 dark:text-gray-600", style="text-align: left;"> I am a dedicated engineer with a strong foundation in computer science and expanding expertise in data science, currently pursuing a Master’s in Applied Data Science and Analytics at Howard University. Through roles with the Department of Defense, NASA, United Launch Alliance, and the NRO, I have built experience in software development, AI-driven data science, and cloud infrastructure. I am committed to leveraging my technical skills in software engineering, cloud computing, and AI/ML to solve complex challenges, drive innovation, and make a meaningful impact in advanced technology environments.</p>
 
-            <div class="flex flex-wrap items-center gap-4">
-            <a href="https://www.raveinnovate.tech/services/" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                let's create.
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
+    <!-- MAIN WRAPPER -->
+    <div class="max-w-4xl mx-auto p-6 space-y-6">
 
-            <a href="https://www.linkedin.com/in/ravenwarner/" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                linkedin.
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
+        <!-- HERO CARD -->
+        <div class="bg-white rounded-lg shadow-xl p-6 text-center">
 
-            <a href="mailto:raven.warner@bison.howard.edu" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                email.
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
-            <a href="https://raveinnovate.tech" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ffA500] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                official site.
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
-            <a href="resume.html" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ffA500] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                resume.
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
-            <a href="https://drive.google.com/file/d/1MDQImIwBaZhVOLov88Mg07bPT5yS7JAe/view?usp=sharing" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ffA500] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                download resume.
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                </svg>
-            </a>
+            <img src="images/raveInnovate.png" class="mx-auto w-40 mb-4"/>
 
-            <!-- <h2 class="mb-3 font-light text-gray-700 dark:text-gray-400"> We're in the process of building something great. In the meantime, feel free to explore.</h2> -->
+            <h2 class="text-2xl font-bold text-[#ff6f91]"
+                style="font-family: 'Playfair Display', serif;">
+                Welcome to raveInnovate
+            </h2>
+
+            <p class="text-sm text-gray-700 mt-2 font-semibold">
+                A professional space by Raven Warner
+            </p>
+
+            <p class="text-gray-600 mt-4 text-sm leading-relaxed text-left">
+                I am a dedicated engineer with a strong foundation in computer science and expanding expertise in data science,
+                currently pursuing a Master’s in Applied Data Science and Analytics at Howard University. Through roles with
+                the Department of Defense, NASA, United Launch Alliance, and the NRO, I have built experience in software
+                development, AI-driven data science, and cloud infrastructure.
+            </p>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex flex-wrap justify-center gap-3 mt-6">
+
+                <a href="https://www.raveinnovate.tech/services/"
+                    class="px-4 py-2 bg-[#ff6f91] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+                    let's create
+                </a>
+
+                <a href="https://www.linkedin.com/in/ravenwarner/"
+                    class="px-4 py-2 bg-[#dd7002] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+                    linkedin
+                </a>
+
+                <a href="mailto:raven.warner@bison.howard.edu"
+                    class="px-4 py-2 bg-[#ff6f91] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+                    email
+                </a>
+
+                <a href="resume.html"
+                    class="px-4 py-2 bg-[#dd7002] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+                    resume
+                </a>
+
+                <a href="https://raveinnovate.tech"
+                    class="px-4 py-2 bg-[#38761d] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+                    official site
+                </a>
+                <a href="https://drive.google.com/file/d/1MDQImIwBaZhVOLov88Mg07bPT5yS7JAe/view?usp=sharing" target="_blank"
+                    class="px-4 py-2 bg-[#dd7002] text-white rounded-lg hover:bg-[#5c4033] text-sm">
+                    download resume
+                </a>
+
+            </div>
+        </div>
+
+        <!-- PORTFOLIO CARD -->
+        <div class="bg-white rounded-lg shadow-xl p-6">
+
+            <h3 class="text-xl font-bold text-[#5c4033]"
+                style="font-family: 'Playfair Display', serif;">
+                Portfolio
+            </h3>
+
+            <p class="text-gray-600 text-sm mt-2 mb-4">
+                Explore data storytelling, research, and technical work across multiple domains.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-3">
+
+                <a href="story.html"
+                    class="p-3 bg-[#ff6f91] text-white rounded-lg hover:bg-[#5c4033] text-sm text-center">
+                    data stories
+                </a>
+
+                <a href="social_justice.html"
+                    class="p-3 bg-[#dd7002] text-white rounded-lg hover:bg-[#5c4033] text-sm text-center">
+                    social justice
+                </a>
+
+                <a href="https://github.com/raveinnovate/raveinnovate.github.io/tree/main/ml"
+                    class="p-3 bg-[#ff6f91] text-white rounded-lg hover:bg-[#5c4033] text-sm text-center">
+                    machine learning
+                </a>
+
+                <a href="https://github.com/raveinnovate/raveinnovate.github.io/tree/main/stats_analysis"
+                    class="p-3 bg-[#dd7002] text-white rounded-lg hover:bg-[#5c4033] text-sm text-center">
+                    statistical analysis
+                </a>
+
+            </div>
 
         </div>
-            <br>
-            <h1 class="text-[#5c4033] font-bold text-3xl" style="font-family: 'Playfair Display', serif;">Portfolio</h1>
-            <div class="flex flex-wrap items-center gap-6">
-                <a href="story.html" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                    view data stories.
-                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                    </svg>
-                </a>
-                <a href="social_justice.html" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                    view social justice perspectives.
-                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                    </svg>
-                </a>
-                <a href="https://github.com/raveinnovate/raveinnovate.github.io/tree/main/ml" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                    view machine learning projects.
-                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                    </svg>
-                </a>
-                <a href="https://github.com/raveinnovate/raveinnovate.github.io/tree/main/stats_analysis" target="_blank" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-[#ff6f91] rounded-lg hover:bg-[#5c4033] focus:ring-4 focus:outline-none focus:ring-[#ff6f91] dark:bg-[#ff6f91] dark:hover:bg-[#5c4033] dark:focus:ring-blue-800">
-                    view statistical analyses.
-                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                    </svg>
-                </a>
-
-
-        </div>
-    </div>
-
-    </div>
-    <div>
 
     </div>
 
-
-
+    <!-- MOBILE MENU -->
     <script>
-        const navLinks = document.querySelector('.nav-links')
+        const navLinks = document.querySelector('ul');
         function onToggleMenu(e){
-            e.name = e.name === 'menu' ? 'close' : 'menu'
-            navLinks.classList.toggle('top-[9%]')
+            e.name = e.name === 'menu' ? 'close' : 'menu';
+            navLinks.classList.toggle('hidden');
         }
     </script>
-</body>
 
+</body>
 </html>
